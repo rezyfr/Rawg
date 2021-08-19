@@ -5,7 +5,7 @@
 //  Created by Fidriyanto R on 15/08/21.
 //
 
-struct Publisher: Codable, Identifiable {
+struct PublisherResponse: Codable, Identifiable, Hashable {
     var id: Int
     var name: String
 

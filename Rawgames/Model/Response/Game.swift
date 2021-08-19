@@ -7,17 +7,20 @@
 
 import Foundation
 
-struct Game: Codable, Identifiable {
-    let id: Int
+struct GameResponse: Codable, Identifiable {
+    let idGame: Int
     let name: String
     let releaseDate: String
     let rating: Double
-    let platforms: [Platforms]
+    let platforms: [PlatformsResponse]
     let backgroundImage: String
-    let genre: [Genre]
+    let genre: [GenreResponse]
 
+    var id: Int {
+        idGame
+    }
     enum CodingKeys: String, CodingKey {
-        case id
+        case idGame = "id"
         case name
         case releaseDate = "released"
         case rating

@@ -8,7 +8,7 @@
 import Foundation
 
 class HomeViewModel: ObservableObject {
-    @Published var data = Games(results: [])
+    @Published var data = GamesResponse(results: [])
     @Published var isLoading = false
 
     let service: ServiceProtocol

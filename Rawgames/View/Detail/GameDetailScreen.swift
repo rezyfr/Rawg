@@ -9,13 +9,16 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct GameDetailScreen: View {
-    let game: Game
-    @ObservedObject var detailViewModel = DetailViewModel()
+    let game: GameResponse
+    @State var isFavorited = false
+    @ObservedObject var detailViewModel: DetailViewModel
 
-    init(game: Game) {
+    init(game: GameResponse) {
         self.game = game
+        self.detailViewModel = DetailViewModel( id: game.id)
         UINavigationBar.appearance().backgroundColor = .black
     }
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -31,12 +34,12 @@ struct GameDetailScreen: View {
                                 .resizable()
                                 .frame(width: UIScreen.screenWidth, height: 230)
                                 .aspectRatio(contentMode: .fill)
-
                             GeometryReader { geometry in
                                 self.generateGenre(in: geometry, genres: game.genre)
                             }.padding(.bottom)
                             Group {
                                 Text(game.name).font(.title).fontWeight(.black).foregroundColor(Color.white)
+
                                 Text(game.rating
                                         .ratingMapper())
                                     .font(.headline)
@@ -55,10 +58,53 @@ struct GameDetailScreen: View {
                 }
             }
         }.onAppear {
-            if self.detailViewModel.data.id == 0 {
-                self.detailViewModel.loadGameDetailById(gameId: String(game.id))
+            if detailViewModel.data.gameId == 0 {
+                detailViewModel.loadGameDetailById(gameId: game.id)
             }
-        }.navigationBarTitleDisplayMode(.inline).navigationBarColor(backgroundColor: .black, tintColor: .white)
+            isFavorited = self.detailViewModel.isFavorite
+        }.navigationBarTitleDisplayMode(.inline)
+        .navigationBarColor(backgroundColor: .black, tintColor: .white)
+        .navigationBarItems(trailing: favoriteButton)
+    }
+
+    var favoriteButton: some View {
+        self.isFavorited ?
+            Button(action: {
+                self.isFavorited = !self.detailViewModel.deleteFavorite(id: game.id)
+            }, label: {
+                Image("icon_favorite_solid").imageScale(.large)
+            })
+            :
+            Button(action: {
+                let genres = game.genre.map({
+                    $0.name
+                }).joined(separator: ",")
+
+                let platforms = game.platforms.map({
+                    $0.platform.name
+                }).joined(separator: ",")
+                let publishers = detailViewModel.data.publishers.map({
+                    $0.name
+                }).joined(separator: ",")
+                let favorite: FavoriteModel = FavoriteModel(
+                    id: Int32(game.id),
+                    name: game.name,
+                    publishers: publishers,
+                    releasedDate: game.releaseDate,
+                    rating: Double(game.rating),
+                    platforms: platforms,
+                    backgroundImage: game.backgroundImage,
+                    genres: genres,
+                    description: detailViewModel.data.description,
+                    metacritic: detailViewModel.data.metacritic
+                )
+
+                self.isFavorited = self.detailViewModel.addFavorite(favorite: favorite)
+            }, label: {
+                Image("icon_favorite").imageScale(.large)
+
+            }
+            )
     }
 
     var about: some View {
@@ -68,17 +114,15 @@ struct GameDetailScreen: View {
         }
     }
 
-    private func generateDetail(platforms: [Platforms]) -> some View {
+    private func generateDetail(platforms: [PlatformsResponse]) -> some View {
         var platformName = ""
         platforms.forEach({platform in
             platformName.append("\(platform.platform.name), ")
         })
-        platformName.removeLast(2)
         var publisherNames = ""
         detailViewModel.data.publishers.forEach({publisher in
             publisherNames.append("\(publisher.name), ")
         })
-        publisherNames.removeLast(2)
         return HStack(alignment: .top, spacing: 4) {
             VStack(alignment: .leading) {
                 Text("Platforms")
@@ -117,7 +161,7 @@ struct GameDetailScreen: View {
                 ).strokeBorder(fontColor))
     }
 
-    private func generateGenre(in geo: GeometryProxy, genres: [Genre]) -> some View {
+    private func generateGenre(in geo: GeometryProxy, genres: [GenreResponse]) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
 
@@ -169,24 +213,6 @@ struct GameDetailScreen: View {
             return Color.red
         default:
             return Color.green
-        }
-    }
-
-    struct GameDetail_Previews: PreviewProvider {
-        static var previews: some View {
-            GameDetailScreen(
-                game: Game(id: 1, name: "Devil May Cry", releaseDate: "2021-04-12", rating: 4.48,
-                           platforms: [
-                Platforms(platform: Platform(name: "PS5")),
-                Platforms(platform: Platform(name: "PC") ),
-                Platforms(platform: Platform(name: "Xbox One"))
-            ], backgroundImage: "https://media.rawg.io/media/games/84d/84da2ac3fdfc6507807a1808595afb12.jpg",
-            genre: [
-                Genre(genreId: 1, name: "Action"),
-                Genre(genreId: 2, name: "Sci-fi"),
-                Genre(genreId: 3, name: "Comedy"),
-                Genre(genreId: 4, name: "Adventure")
-            ]))
         }
     }
 }

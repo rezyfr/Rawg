@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Games: Codable {
-    var results: [Game]
+struct GamesResponse: Codable {
+    var results: [GameResponse]
     enum CodingKeys: String, CodingKey {
         case results
     }

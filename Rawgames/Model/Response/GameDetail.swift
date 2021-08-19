@@ -5,14 +5,17 @@
 //  Created by Fidriyanto R on 15/08/21.
 //
 
-struct GameDetail: Codable, Identifiable {
-    var id: Int
+struct GameDetailResponse: Codable, Identifiable {
+    var gameId: Int
+    var id: Int {
+        gameId
+    }
     var description: String
-    var publishers: [Publisher]
+    var publishers: [PublisherResponse]
     var metacritic: Int
 
     enum CodingKeys: String, CodingKey {
-        case id
+        case gameId = "id"
         case description = "description_raw"
         case publishers
         case metacritic

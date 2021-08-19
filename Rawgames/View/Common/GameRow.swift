@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct GameRow: View {
-    var game: Game
+    var game: GameResponse
     var body: some View {
         ZStack(alignment: Alignment.topLeading) {
             WebImage(url: URL(string: game.backgroundImage), options: .highPriority, context: nil)
@@ -56,7 +56,7 @@ struct GameRow: View {
 }
 
 struct PlatformView: View {
-    var platform: Platforms
+    var platform: PlatformsResponse
     var body: some View {
         Text(platform.platform.name.platformMapper())
             .font(.caption2)
@@ -119,11 +119,11 @@ struct RoundedCorner: Shape {
 
 struct GameRow_Previews: PreviewProvider {
     static var previews: some View {
-        GameRow(game: Game(id: 1, name: "Devil May Cry", releaseDate: "2021-04-12", rating: 4.48, platforms: [
-            Platforms(platform: Platform(name: "PS5")),
-            Platforms(platform: Platform(name: "PC") ),
-            Platforms(platform: Platform(name: "Xbox One"))
+        GameRow(game: GameResponse(idGame: 1, name: "GTA 5", releaseDate: "2021-04-12", rating: 4.48, platforms: [
+            PlatformsResponse(platform: PlatformResponse(name: "PS5")),
+            PlatformsResponse(platform: PlatformResponse(name: "PC") ),
+            PlatformsResponse(platform: PlatformResponse(name: "Xbox One"))
         ], backgroundImage: "https://media.rawg.io/media/games/84d/84da2ac3fdfc6507807a1808595afb12.jpg",
-        genre: [Genre(genreId: 1, name: "Action")]))
+        genre: [GenreResponse(genreId: 1, name: "Action")]))
     }
 }

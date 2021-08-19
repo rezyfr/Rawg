@@ -24,14 +24,18 @@ struct GameList: View {
                     NavigationLink(destination: ProfileView()) {
                         Image("profile")
                     }
+                    NavigationLink(destination: FavoriteScreen()) {
+                        Image("icon_favorite_solid")
+                    }.padding(.leading)
                 }
 
-                if homeViewModel.isLoading {ZStack {
-                    Color.black.ignoresSafeArea()
-                    VStack(alignment: .center) {
+                if homeViewModel.isLoading {
+                    ZStack(alignment: .center) {
                         Color.black.ignoresSafeArea()
-                        LoadingIndicator()
-                    }}
+                        VStack(alignment: .center) {
+                            LoadingIndicator()
+                        }
+                    }
                 } else {
                     if !homeViewModel.data.results.isEmpty {
                         ScrollView(.vertical, showsIndicators: true) {
