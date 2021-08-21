@@ -20,11 +20,23 @@ struct GameRow: View {
                     ZStack(alignment: .bottomLeading) {
                         Color.black.opacity(0.2)
                         VStack(alignment: .leading, spacing: 0) {
+                            Text(game.releaseDate)
+                                .font(.caption)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 2)
+                                .foregroundColor(.white)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 25.0)
+                                        .fill(Color.white.opacity(0.25))
+                                ).padding(.leading, 6)
+                                .padding(.bottom, 4)
                             LazyHStack {
                                 ForEach(game.platforms.prefix(3), id: \.platform.name) { platform in
                                     PlatformView(platform: platform)
                                 }
-                            }.frame(height: 20).padding(.leading, 6).padding(.bottom, 4)
+                            }.frame(height: 20)
+                            .padding(.leading, 6)
                             Text(game.name)
                                 .font(.headline)
                                 .foregroundColor(Color.white)
@@ -45,7 +57,7 @@ struct GameRow: View {
                             RoundedRectangle(
                                 cornerRadius: 25.0
                             ).strokeBorder(Color.white).background(
-                                RoundedRectangle(cornerRadius: 25.0/*@END_MENU_TOKEN@*/)
+                                RoundedRectangle(cornerRadius: 25.0)
                                     .fill(Color.black.opacity(0.25))))
 
                 }.padding(.top, 6).padding(.trailing, 6)
@@ -64,7 +76,7 @@ struct PlatformView: View {
             .padding(.vertical, 2)
             .foregroundColor(.white)
             .background(
-                RoundedRectangle(cornerRadius: 25.0/*@END_MENU_TOKEN@*/)
+                RoundedRectangle(cornerRadius: 25.0)
                     .fill(Color.black.opacity(0.5))
             )
     }

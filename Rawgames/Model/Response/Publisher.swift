@@ -8,9 +8,4 @@
 struct PublisherResponse: Codable, Identifiable, Hashable {
     var id: Int
     var name: String
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-    }
 }

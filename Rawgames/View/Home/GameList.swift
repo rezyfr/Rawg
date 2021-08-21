@@ -41,7 +41,7 @@ struct GameList: View {
                         ScrollView(.vertical, showsIndicators: true) {
                             VStack {
                                 ForEach(homeViewModel.data.results) { game in
-                                    NavigationLink(destination: GameDetailScreen( game: game)) {
+                                    NavigationLink(destination: GameDetailScreen(game: game)) {
                                         GameRow(game: game).listRowInsets(EdgeInsets())
                                     }.listRowBackground(Color.black).listRowInsets(EdgeInsets())
                                 }

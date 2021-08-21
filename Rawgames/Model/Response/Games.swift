@@ -9,7 +9,4 @@ import Foundation
 
 struct GamesResponse: Codable {
     var results: [GameResponse]
-    enum CodingKeys: String, CodingKey {
-        case results
-    }
 }

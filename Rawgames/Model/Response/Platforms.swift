@@ -9,8 +9,4 @@ import Foundation
 
 struct PlatformsResponse: Codable, Hashable {
     let platform: PlatformResponse
-
-    enum CodingKeys: String, CodingKey {
-        case platform
-    }
 }
